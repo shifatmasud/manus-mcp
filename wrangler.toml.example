@@ -1,0 +1,10 @@
+# Copy to wrangler.toml and fill in your account_id.
+# Then:  npm i -g wrangler && wrangler deploy
+name = "manus-mcp"
+main = "worker.js"
+compatibility_date = "2025-06-01"
+
+# Find it at: Cloudflare dash → Workers & Pages → right sidebar
+account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+
+workers_dev = true

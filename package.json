@@ -1,0 +1,15 @@
+{
+  "name": "manus-mcp",
+  "version": "1.0.0",
+  "description": "Remote MCP server bridging the Manus API, hosted on Cloudflare Workers",
+  "type": "module",
+  "scripts": {
+    "check": "node --check worker.js",
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  },
+  "license": "MIT"
+}
