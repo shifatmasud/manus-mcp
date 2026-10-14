@@ -24,7 +24,8 @@ Upsy's "Add MCP Server" dialog asks for two things: an **MCP Endpoint** and an o
 
 - 🔌 **Remote MCP (Streamable HTTP)** — works with Upsy, Claude, Cursor, and any spec-compliant client
 - 🔑 **Per-request Bearer passthrough** — each caller uses their own Manus credential
-- 🧰 **7 focused tools** — whoami, create / message / read / inspect / list / stop tasks
+- 🧰 **8 focused tools** — whoami, create / message / read / inspect / list / stop / confirm tasks
+- 🔄 **Auto-redeploy on push** — GitHub Actions + Wrangler (see [CI/CD](docs/08-cicd.md))
 - 📦 **Single file, zero dependencies** — `worker.js`, ~11 KB, no build step
 - 🌍 **Edge-hosted** — runs on Cloudflare Workers (`workers.dev`, or your own domain)
 
@@ -45,6 +46,7 @@ Upsy's "Add MCP Server" dialog asks for two things: an **MCP Endpoint** and an o
 | [05 — Testing](docs/05-testing.md) | Prove the loop works end-to-end with curl |
 | [06 — Troubleshooting](docs/06-troubleshooting.md) | Fix the errors you'll actually hit |
 | [07 — Manus Flex & profiles](docs/07-flex-and-profiles.md) | Why `agent_profile: "flex"` doesn't work (verified) |
+| [08 — CI/CD](docs/08-cicd.md) | Auto-redeploy to Cloudflare on every push |
 
 ## Tools at a glance
 
@@ -57,6 +59,7 @@ Upsy's "Add MCP Server" dialog asks for two things: an **MCP Endpoint** and an o
 | `manus_get_task` | Status & details of a task |
 | `manus_list_tasks` | Recent tasks, newest first |
 | `manus_stop_task` | Stop a running task |
+| `manus_confirm_action` | Confirm a pending action on a waiting task |
 
 Full schemas and examples: [Tools reference](docs/04-tools-reference.md).
 

@@ -48,7 +48,7 @@ You're calling through a generic bridge that wants the tool args in a specific e
 
 ## Task never finishes
 
-Some tasks pause for input (`waiting_for_event_id` in `manus_get_task`). Answer via `manus_send_message`, or open `task_url` in the browser. For action confirmations (`confirm_input_schema`), use the web app — this bridge doesn't expose `task.confirmAction` yet.
+Some tasks pause for input (`waiting_for_event_id` in `manus_get_task`). Plain questions → answer via `manus_send_message`. Action confirmations (`confirm_input_schema`) → `manus_confirm_action` with `event_id` set to `waiting_for_event_id` and `input` built from the schema (see [Tools reference](04-tools-reference.md)). Or open `task_url` in the browser.
 
 ## Still stuck?
 

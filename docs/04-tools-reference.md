@@ -1,6 +1,6 @@
 # 04 — Tools reference
 
-Seven tools. Each maps to one Manus API v2 endpoint. Results come back as pretty-printed JSON in a single text block.
+Eight tools. Each maps to one Manus API v2 endpoint. Results come back as pretty-printed JSON in a single text block.
 
 > Conventions: `task_id` is the 22-character ID returned by `manus_create_task`
 > (or the shortcut `agent-default-main_task` for the default IM agent).
@@ -46,7 +46,7 @@ Follow-up message on an existing task (multi-turn).
 
 - **Arguments:** `task_id` ✅, `message` ✅
 - **Upstream:** `POST /v2/task.sendMessage`
-- **Tip:** if the agent asked a normal question, answer here. If it's an *action confirmation* (`waiting_for_event_id` + `confirm_input_schema` in task detail), that needs `task.confirmAction`, which this bridge doesn't expose yet — reply in plain language or open the task URL instead.
+- **Tip:** if the agent asked a normal question, answer here. If it is an *action confirmation* (`waiting_for_event_id` + `confirm_input_schema` in task detail), use `manus_confirm_action`.
 
 ## manus_get_messages
 
@@ -79,6 +79,15 @@ Stop a running task.
 
 - **Arguments:** `task_id` ✅
 - **Upstream:** `POST /v2/task.stop`
+
+## manus_confirm_action
+
+Confirm a pending action on a waiting task.
+
+- **Arguments:** `task_id` ✅, `event_id` ✅ (the `waiting_for_event_id` from the waiting `status_update`), `input` (object matching the event's `confirm_input_schema`; omit for simple confirmations)
+- **Upstream:** `POST /v2/task.confirmAction`
+- **Flow:** `manus_get_task` shows `agent_status: waiting` → `manus_get_messages` with `verbose: true` to find the waiting event and its `confirm_input_schema` + tool params → build `input` → call this.
+- **Do NOT use for plain questions** (`messageAskUser` / `cascadeAskUser`) — answer those with `manus_send_message`. Never auto-confirm an action you don't understand.
 
 ---
 

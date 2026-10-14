@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.0 — 2026-10-14
+
+- New tool: `manus_confirm_action` (`task.confirmAction`) — confirm pending actions on waiting tasks
+- CI/CD: GitHub Actions auto-redeploys the worker on push (`docs/08-cicd.md`)
+- Repo is now public
+
 ## 1.0.0 — 2026-10-14
 
 Initial public release.

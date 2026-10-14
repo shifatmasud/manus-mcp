@@ -12,7 +12,7 @@ var MANUS_BASE = "https://api.manus.ai";
 var CRLF = String.fromCharCode(13, 10);
 
 var SUPPORTED_PROTOCOLS = ["2025-06-18", "2025-03-26", "2024-11-05"];
-var SERVER_INFO = { name: "manus-mcp", version: "1.0.0" };
+var SERVER_INFO = { name: "manus-mcp", version: "1.1.0" };
 
 var TOOLS = [
   {
@@ -87,6 +87,20 @@ var TOOLS = [
       type: "object",
       properties: { task_id: { type: "string", description: "The task ID to stop." } },
       required: ["task_id"],
+      additionalProperties: false
+    }
+  },
+  {
+    name: "manus_confirm_action",
+    description: "Confirm a pending action on a waiting Manus task. Use when manus_get_task shows agent_status waiting with a waiting_for_event_id. First read the waiting event with manus_get_messages verbose true, build input to match its confirm_input_schema, then call this. Do NOT use for plain questions (messageAskUser / cascadeAskUser) - answer those with manus_send_message instead.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        task_id: { type: "string", description: "The task ID with a pending action." },
+        event_id: { type: "string", description: "The waiting_for_event_id from the waiting status_update event." },
+        input: { type: "object", description: "Input matching the event confirm_input_schema. Omit for simple confirmations with no schema." }
+      },
+      required: ["task_id", "event_id"],
       additionalProperties: false
     }
   }
@@ -165,6 +179,11 @@ function callTool(name, args, request, env) {
   if (name === "manus_stop_task") {
     return manusFetch(request, env, "POST", "/v2/task.stop", { task_id: args.task_id }).then(textResult);
   }
+  if (name === "manus_confirm_action") {
+    var confirmBody = { task_id: args.task_id, event_id: args.event_id };
+    if (args.input !== undefined) confirmBody.input = args.input;
+    return manusFetch(request, env, "POST", "/v2/task.confirmAction", confirmBody).then(textResult);
+  }
   return Promise.reject(new Error("Unknown tool: " + name));
 }
 
@@ -212,7 +231,7 @@ function helpPage(origin) {
     + "<h1>manus-mcp</h1><p>Remote MCP server bridging the Manus API. Stateless Streamable HTTP.</p>"
     + "<h3>Connect from Upsy</h3><p><b>MCP Endpoint:</b> " + origin + "/mcp<br><b>Token:</b> your Manus OAuth access token or API key</p>"
     + "<h3>Tools</h3><ul><li>manus_whoami</li><li>manus_create_task</li><li>manus_send_message</li>"
-    + "<li>manus_get_messages</li><li>manus_get_task</li><li>manus_list_tasks</li><li>manus_stop_task</li></ul></body></html>";
+    + "<li>manus_get_messages</li><li>manus_get_task</li><li>manus_list_tasks</li><li>manus_stop_task</li><li>manus_confirm_action</li></ul></body></html>";
 }
 
 export default {
